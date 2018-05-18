@@ -4,7 +4,8 @@ function MinifyGas() {
 }
 
 function minify(source) {
-  var comment_reg = /\/\*.*?\*\/|\/\/.*/g;
+  var comment_reg = /\/\*.*?\*\//g;
+  var comment_reg2 = /\n\/\/.*/g
   var tab_reg = /\t/g;
   var space_reg = /(\n)\s+/g;
   var new_line_reg = /\n{2,}/g;
@@ -15,7 +16,8 @@ function minify(source) {
   .replace(tab_reg, '')
   .replace(space_reg, '$1')
   .replace(new_line_reg, '')
-  .replace(semicolon_reg, '$1$2');
+  .replace(semicolon_reg, '$1$2')
+  .replace(comment_reg2, '');
   return tmp_source
 }
 
