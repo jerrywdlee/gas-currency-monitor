@@ -102,3 +102,14 @@ $ npm build
   "sPHPJPY": "0.47619047"
 }
 ```
+
+### Table `settings`
+| A | B | C
+:----:| ----: | :----
+|  | F_CNYJPY | 16 |
+|  | AVG_CNYJPY | 17.72... |
+|  | chartImage | < image_url > |
+|  | slackUrl | < slackUrl > |
+|  | clickUrl | < payforexUrl > |
+|  | slackName | < slackName > |
+
