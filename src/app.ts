@@ -3,8 +3,9 @@ import { Test } from './Test'
 
 global.test = () => {
   const test = new Test()
-  Logger.log(JSON.stringify(getCellPairs()))
+  // Logger.log(JSON.stringify(getCellPairs('B:C')))
   test.echo('new world.')
+  updateValsByKeys({ currentRate: 17 }, 'B:C', { sheetName: 'settings' })
 }
 
 global.doGet = (e) => {
@@ -24,7 +25,7 @@ global.getCurrencyRate = () => {
   const sheet = S.connect({ sheetName: 'currency_records' })
   sheet.appendRow([(new Date()).toLocaleString(), ...vals])
 
-  const settings = getCellPairs()
+  const settings = getCellPairs('B:C')
   const averageRate = settings.AVG_CNYJPY
   const cnyJpy = vals[0]
   if (cnyJpy < averageRate) {
@@ -72,13 +73,33 @@ function sendToSlack(url: string, payload: SlackPayload) {
   UrlFetchApp.fetch(url, params)
 }
 
-function getCellPairs(): any {
+function getCellPairs(column: string): any {
   const sheet = S.connect({ sheetName: 'settings' })
-  const range = sheet.getRange('B:C')
+  const range = sheet.getRange(column)
   const rows = range.getValues().filter(row => row[0])
   const values = {}
   rows.forEach(r => values[r[0].toString()] = r[1])
   return values
+}
+
+function updateValsByKeys(params: {}, column: string, opt: any) {
+  const sheet = S.connect(opt)
+  const range = sheet.getRange(column)
+
+  const keys = Object.keys(params)
+  const keyLocats = {}
+  range.getValues().forEach((row, i) => {
+    const k = row[0].toString()
+    if (keys.indexOf(k) !== -1) {
+      keyLocats[k] = i + 1
+    }
+  })
+  const keyCol = column.split(':')[1]
+  keys.forEach(k => {
+    const cellId = `${keyCol}${keyLocats[k]}`
+    const cell = sheet.getRange(cellId)
+    cell.setValue(params[k])
+  })
 }
 
 interface SlackPayload {
