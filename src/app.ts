@@ -28,9 +28,12 @@ global.getCurrencyRate = () => {
   const settings = getCellPairs('B:C')
   const averageRate = settings.AVG_CNYJPY
   const cnyJpy = vals[0]
-  if (cnyJpy < averageRate) {
+  updateValsByKeys({ currentRate: cnyJpy }, 'B:C', { sheetName: 'settings' })
+
+  if (cnyJpy.toString() !== settings.currentRate.toString()) {
     const p = {
       rate: cnyJpy,
+      avgRate: averageRate,
       slackName: settings.slackName,
       clickUrl: settings.clickUrl,
       chartUrl: settings.chartImage,
@@ -38,8 +41,8 @@ global.getCurrencyRate = () => {
     const slackUrl = settings.slackUrl
     const payload = formSlackMsg(p)
     sendToSlack(slackUrl, payload)
-    Logger.log(slackUrl)
-    Logger.log(JSON.stringify(p))
+    // Logger.log(slackUrl)
+    // Logger.log(JSON.stringify(p))
   }
   Logger.log(vals)
   return
@@ -52,13 +55,13 @@ global.getCurrencyRate = () => {
 //   return value
 // }
 
-function formSlackMsg(params: { rate: string, slackName: string, clickUrl: string, chartUrl: string }): SlackPayload {
+function formSlackMsg(params: { rate: string, avgRate: string, slackName: string, clickUrl: string, chartUrl: string }): SlackPayload {
   const attach = {
     fallback: 'Rate Chart',
     image_url: params.chartUrl,
   }
   const msg = {
-    text: `<@${params.slackName}> Low Rate! _*${params.rate}*_ !! \n<${params.clickUrl}>`,
+    text: `<@${params.slackName}> New Rate! _*${params.rate}*_ !! \nAverage: ${params.avgRate} \n<${params.clickUrl}>`,
     attachments: [attach],
   }
   return msg
