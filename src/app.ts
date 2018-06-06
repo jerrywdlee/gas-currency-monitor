@@ -55,7 +55,7 @@ global.getCurrencyRate = () => {
 //   return value
 // }
 
-function formSlackMsg(params: { rate: string, avgRate: string, slackName: string, clickUrl: string, chartUrl: string }): SlackPayload {
+function formSlackMsg(params: SlackMsgParam): SlackPayload {
   const attach = {
     fallback: 'Rate Chart',
     image_url: params.chartUrl,
@@ -66,6 +66,7 @@ function formSlackMsg(params: { rate: string, avgRate: string, slackName: string
   }
   return msg
 }
+interface SlackMsgParam { rate: string, avgRate: string, slackName: string, clickUrl: string, chartUrl: string }
 
 function sendToSlack(url: string, payload: SlackPayload) {
   const params = {
