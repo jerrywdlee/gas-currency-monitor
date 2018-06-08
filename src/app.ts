@@ -33,7 +33,7 @@ global.getCurrencyRate = () => {
   if (cnyJpy.toString() !== settings.currentRate.toString()) {
     const p = {
       rate: cnyJpy,
-      avgRate: averageRate,
+      avgRate: (Math.round(parseFloat(averageRate) * 1000) / 1000).toString(),
       slackName: settings.slackName,
       clickUrl: settings.clickUrl,
       chartUrl: settings.chartImage,
