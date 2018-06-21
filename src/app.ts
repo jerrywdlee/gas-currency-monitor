@@ -30,7 +30,7 @@ global.getCurrencyRate = () => {
   const cnyJpy = vals[0]
   updateValsByKeys({ currentRate: cnyJpy }, 'B:C', { sheetName: 'settings' })
 
-  if (cnyJpy.toString() !== settings.currentRate.toString()) {
+  if (parseFloat(cnyJpy.toString()) !== parseFloat(settings.currentRate.toString())) {
     const p = {
       rate: cnyJpy,
       avgRate: (Math.round(parseFloat(averageRate) * 1000) / 1000).toString(),
