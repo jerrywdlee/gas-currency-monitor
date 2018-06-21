@@ -4,6 +4,7 @@
   "description": "Check Exchange rate of http://www1.payforex.net and record to spreadsheets",
   "main": "src/index.ts",
   "author": "Jerry lee",
+  "repository": "https://github.com/jerrywdlee/gas-currency-monitor.git",
   "license": "MIT",
   "scripts": {
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
